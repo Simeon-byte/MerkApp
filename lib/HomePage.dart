@@ -1,39 +1,123 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/Widgets.dart';
+import 'package:merkapp/scoreScreen.dart';
+import 'package:merkapp/functionality.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({
     Key? key,
     required this.title,
-    required this.score,
-    required this.incrementCounter,
-    required this.started,
-    required this.startGame,
-    required this.sequence,
-    required this.sequenceIndex,
-    required this.handleSequence,
   }) : super(key: key);
 
   final String title;
-  int score;
-  final ValueChanged<int> incrementCounter;
-  final ValueChanged<void> startGame;
-  bool started;
 
-  final List<int> sequence;
-  final int sequenceIndex;
-
-  final Function handleSequence;
+  final _buttonKey = GlobalKey<ButtonColumnState>();
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  MyHomePageState createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  void handleSequenceNew(bool right) {
-    widget.handleSequence(context, right);
+class MyHomePageState extends State<MyHomePage> {
+  bool started = false;
+  int score = 0;
+  List<int> sequence = [];
+  int sequenceIndex = 0;
+  bool isFlashing = false;
+
+  void setFlashing(bool value) {
+    setState(() {
+      isFlashing = value;
+    });
   }
+
+  void handleClick(int index) async {
+    print("flashing: $isFlashing");
+    if (!started || isFlashing == true) return;
+    setState(() {
+      isFlashing = true;
+    });
+    if (index == sequence[sequenceIndex]) {
+      // Answer is right
+
+      if (sequenceIndex + 1 == sequence.length) {
+        setState(() {
+          sequence = generateSequence(sequence.length + 1);
+          sequenceIndex = 0;
+          score++;
+        });
+        print(sequence);
+        await Future.delayed(const Duration(milliseconds: 500), () {});
+        widget._buttonKey.currentState?.flashButtons(sequence);
+      } else {
+        setState(() {
+          sequenceIndex++;
+        });
+      }
+      print('new Index: $sequenceIndex');
+    } else {
+      // Answer is wrong
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ScoreScreen(score: score)),
+        (Route<dynamic> route) => false,
+      );
+
+      // Navigator.pushReplacement(
+      //   // ctx, MaterialPageRoute(builder: (ctx) => ScoreScreen(score: _score))
+      //   ctx,
+      //   PageRouteBuilder(
+      //     transitionDuration: Duration.zero,
+      //     pageBuilder: (_, __, ___) => ScoreScreen(score: _score),
+      //   ),
+
+      //   // Navigator.push(
+      //   //   ctx,
+      //   //   MaterialPageRoute(builder: (ctx) => ScoreScreen(score: _score)),
+      // );
+      // handle wrong click
+    }
+  }
+
+  void _startGame() {
+    setState(() {
+      sequence = generateSequence(3);
+      started = true;
+      isFlashing = true;
+    });
+
+    widget._buttonKey.currentState?.flashButtons(sequence);
+    print(sequence);
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   score = score;
+  // }
+
+  void _incrementCounter(int value) {
+    if (!started) return;
+    setState(() {
+      score += value;
+      print('increment: $score');
+    });
+  }
+
+  // void handleSequenceNew(int index) {
+  //   handleSequence(context, index);
+  // }
+
+  late ButtonColumn buttons = ButtonColumn(
+      key: widget._buttonKey,
+      score: score,
+      incrementCounter: _incrementCounter,
+      started: started,
+      sequence: sequence,
+      sequenceIndex: sequenceIndex,
+      handleClick: handleClick,
+      setFlashing: setFlashing);
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -90,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     alignment: const AlignmentDirectional(0, 0),
-                    child: widget.started == false
+                    child: started == false
                         ? Container(
                             width: double.infinity,
                             height: 100,
@@ -100,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             child: ElevatedButton(
                               onPressed: () {
-                                widget.startGame(null);
+                                _startGame();
                               },
                               child: const Text(
                                 // FFAppState().score.toString(),
@@ -145,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     20, 0, 0, 0),
                                 child: Text(
-                                  widget.score.toString(),
+                                  score.toString(),
                                   // 'tmp',
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
@@ -206,14 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Align(
                   alignment: const AlignmentDirectional(0, 0),
-                  child: ButtonColumn(
-                    score: widget.score,
-                    incrementCounter: widget.incrementCounter,
-                    started: widget.started,
-                    sequence: widget.sequence,
-                    sequenceIndex: widget.sequenceIndex,
-                    handleSequence: handleSequenceNew,
-                  ),
+                  child: buttons,
                 ),
               ],
             ),

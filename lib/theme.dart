@@ -6,6 +6,7 @@ class ColorTheme {
   static Color grauHell = const Color.fromARGB(255, 133, 133, 133);
   static Color border = const Color.fromARGB(255, 27, 27, 27);
 
+  static Color borderHighlighted = Color.fromARGB(255, 255, 255, 255);
   static Color highlighted = const Color.fromARGB(255, 255, 0, 0);
 
   static TextStyle bodyText1 = const TextStyle(

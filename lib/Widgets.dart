@@ -1,28 +1,48 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
-import 'package:merkapp/scoreScreen.dart';
-import 'dart:math';
+import 'dart:async';
 
 class MyButton extends StatefulWidget {
   final Function selectHandler;
   final Color? color;
 
-  const MyButton(this.selectHandler, {this.color});
+  MyButton(Key key, this.selectHandler, {this.color}) : super(key: key);
+  // const MyButton(Key key,this.selectHandler, this.flashing, {this.color,});
 
   @override
-  State<MyButton> createState() => _MyButtonState();
+  State<MyButton> createState() => MyButtonState();
 }
 
-class _MyButtonState extends State<MyButton> {
+class MyButtonState extends State<MyButton> {
+  bool flashing = false;
+  void flashButton() {
+    setState(() {
+      flashing = true;
+    });
+
+    Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        flashing = false;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 200),
       width: 100,
       height: 100,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [ColorTheme.border, widget.color ?? ColorTheme.grauDunkel],
+          colors: [
+            ColorTheme.border,
+            flashing
+                ? ColorTheme.highlighted
+                : (widget.color ?? ColorTheme.grauDunkel)
+          ],
           stops: const [0, 1],
           begin: const AlignmentDirectional(1, 1),
           end: const AlignmentDirectional(-1, -1),
@@ -41,45 +61,61 @@ class _MyButtonState extends State<MyButton> {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    side: BorderSide(color: ColorTheme.border, width: 3)))),
+                    side: BorderSide(
+                        color: flashing
+                            ? ColorTheme.borderHighlighted
+                            : ColorTheme.border,
+                        width: 3)))),
       ),
     );
   }
 }
 
 class ButtonColumn extends StatefulWidget {
-  ButtonColumn({
-    Key? key,
-    required this.score,
-    required this.incrementCounter,
-    required this.started,
-    required this.sequence,
-    required this.sequenceIndex,
-    required this.handleSequence,
-  }) : super(key: key);
+  ButtonColumn(
+      {Key? key,
+      required this.score,
+      required this.incrementCounter,
+      required this.started,
+      required this.sequence,
+      required this.sequenceIndex,
+      required this.handleClick,
+      required this.setFlashing})
+      : super(key: key);
 
   int score;
   final ValueChanged<int> incrementCounter;
   bool started;
-
   final List<int> sequence;
   final int sequenceIndex;
-  final Function handleSequence;
-
-  void selectHandler(int index) {
-    // incrementCounter(1);
-    if (index == sequence[sequenceIndex]) {
-      handleSequence(true);
-    } else {
-      handleSequence(false);
-    }
-  }
+  final Function handleClick;
+  final Function setFlashing;
 
   @override
-  State<ButtonColumn> createState() => _ButtonColumnState();
+  State<ButtonColumn> createState() => ButtonColumnState();
 }
 
-class _ButtonColumnState extends State<ButtonColumn> {
+class ButtonColumnState extends State<ButtonColumn> {
+  List<GlobalKey<MyButtonState>> keys = [
+    for (int i = 0; i < 9; i++) GlobalKey()
+  ];
+  late List<MyButton> buttons = [
+    for (int i = 0; i < 9; i++)
+      MyButton(keys[i], () => {widget.handleClick(i)},
+          color: widget.started == true ? ColorTheme.highlighted : null)
+    // MyButton(() => {key: UniqueKey(),widget.handleSequence(i)},false,
+    //     color: widget.started == true ? ColorTheme.highlighted : null)
+  ];
+
+  void flashButtons(sequence) async {
+    for (int index in sequence) {
+      keys[index].currentState?.flashButton();
+      await Future.delayed(const Duration(milliseconds: 1000), () {});
+    }
+    await Future.delayed(const Duration(milliseconds: 50), () {});
+    widget.setFlashing(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -91,39 +127,22 @@ class _ButtonColumnState extends State<ButtonColumn> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int i = 0; i < 3; i++)
-              MyButton(() => {widget.selectHandler(i)},
-                  color:
-                      widget.started == true ? ColorTheme.highlighted : null),
-
-            // AnimatedContainerApp(),
-            // MyButton(() => {widget.incrementCounter(1)},
-            //     color: widget.started == true ? ColorTheme.highlighted : null),
-            // MyButton(() => {widget.incrementCounter(1)},
-            //     color: widget.started == true ? ColorTheme.highlighted : null),
-            // MyButton(() => {widget.incrementCounter(1)},
-            //     color: widget.started == true ? ColorTheme.highlighted : null),
+            ...buttons.getRange(0, 3),
+            // for (int i = 0; i < 3; i++)
+            //   MyButton(() => {widget.handleSequence(i)},
+            //       color:
+            //           widget.starsdfsfted == true ? ColorTheme.highlighted : null),
           ],
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (int i = 3; i < 6; i++)
-              MyButton(() => {widget.selectHandler(i)},
-                  color:
-                      widget.started == true ? ColorTheme.highlighted : null),
-          ],
+          children: [...buttons.getRange(3, 6)],
         ),
         Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (int i = 6; i < 9; i++)
-              MyButton(() => {widget.selectHandler(i)},
-                  color:
-                      widget.started == true ? ColorTheme.highlighted : null),
-          ],
+          children: [...buttons.getRange(6, 9)],
         ),
       ],
     );
