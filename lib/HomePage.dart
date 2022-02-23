@@ -29,17 +29,13 @@ class MyHomePageState extends State<MyHomePage> {
     setState(() {
       if (value == 1) {
         isFlashing = true;
-        print("set flashing to true");
       } else {
         isFlashing = false;
-        print("set flashing to false");
       }
     });
-    print("is flashing $isFlashing");
   }
 
   void handleClick(int index) async {
-    print("flashing: $isFlashing");
     if (!started || isFlashing == true) return;
     if (index == sequence[sequenceIndex]) {
       // Answer is right
@@ -52,7 +48,6 @@ class MyHomePageState extends State<MyHomePage> {
           score++;
         });
         print(sequence);
-        await Future.delayed(const Duration(milliseconds: 500), () {});
         widget._buttonKey.currentState?.flashButtons(sequence);
       } else {
         setState(() {
@@ -65,7 +60,9 @@ class MyHomePageState extends State<MyHomePage> {
 
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => ScoreScreen(score: score)),
+        MaterialPageRoute(
+            builder: (context) =>
+                ScoreScreen(score: score, title: widget.title)),
         (Route<dynamic> route) => false,
       );
 
@@ -167,7 +164,7 @@ class MyHomePageState extends State<MyHomePage> {
             child: Stack(
               children: [
                 Align(
-                  alignment: const AlignmentDirectional(-0.06, 0.87),
+                  alignment: const AlignmentDirectional(0, 0.87),
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 100,
