@@ -25,23 +25,28 @@ class MyHomePageState extends State<MyHomePage> {
   int sequenceIndex = 0;
   bool isFlashing = false;
 
-  void setFlashing(bool value) {
+  void _setFlashing(int value) {
     setState(() {
-      isFlashing = value;
+      if (value == 1) {
+        isFlashing = true;
+        print("set flashing to true");
+      } else {
+        isFlashing = false;
+        print("set flashing to false");
+      }
     });
+    print("is flashing $isFlashing");
   }
 
   void handleClick(int index) async {
     print("flashing: $isFlashing");
     if (!started || isFlashing == true) return;
-    setState(() {
-      isFlashing = true;
-    });
     if (index == sequence[sequenceIndex]) {
       // Answer is right
 
       if (sequenceIndex + 1 == sequence.length) {
         setState(() {
+          isFlashing = true;
           sequence = generateSequence(sequence.length + 1);
           sequenceIndex = 0;
           score++;
@@ -117,7 +122,7 @@ class MyHomePageState extends State<MyHomePage> {
       sequence: sequence,
       sequenceIndex: sequenceIndex,
       handleClick: handleClick,
-      setFlashing: setFlashing);
+      setFlashing: _setFlashing);
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'dart:async';
@@ -89,7 +88,7 @@ class ButtonColumn extends StatefulWidget {
   final List<int> sequence;
   final int sequenceIndex;
   final Function handleClick;
-  final Function setFlashing;
+  final ValueChanged<int> setFlashing;
 
   @override
   State<ButtonColumn> createState() => ButtonColumnState();
@@ -112,8 +111,9 @@ class ButtonColumnState extends State<ButtonColumn> {
       keys[index].currentState?.flashButton();
       await Future.delayed(const Duration(milliseconds: 1000), () {});
     }
-    await Future.delayed(const Duration(milliseconds: 50), () {});
-    widget.setFlashing(false);
+    Future.delayed(const Duration(milliseconds: 50), () {
+      widget.setFlashing(0);
+    });
   }
 
   @override
