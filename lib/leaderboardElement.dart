@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 
 class LeaderBoardElement extends StatelessWidget {
-  const LeaderBoardElement({Key? key}) : super(key: key);
+  const LeaderBoardElement({Key? key, required this.time, required this.score})
+      : super(key: key);
+
+  final String time;
+  final int score;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +23,10 @@ class LeaderBoardElement extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '23.02.2022 17:40',
+              time,
               style: ColorTheme.bodyTextMedium,
             ),
-            Text('10', style: ColorTheme.bodyTextBoldSmall),
+            Text(score.toString(), style: ColorTheme.bodyTextBoldSmall),
           ],
         ),
       ),

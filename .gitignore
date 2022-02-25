@@ -9,6 +9,7 @@
 .history
 .svn/
 
+
 # IntelliJ related
 *.iml
 *.ipr
@@ -23,6 +24,7 @@
 .dart_tool/
 .flutter-plugins
 .packages
+.flutter-plugins-dependencies
 .pub-cache/
 .pub/
 /build/

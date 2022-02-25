@@ -1,9 +1,67 @@
+import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboardElement.dart';
+import 'package:localstorage/localstorage.dart';
 
-class Leaderboard extends StatelessWidget {
-  const Leaderboard({Key? key}) : super(key: key);
+class Leaderboard extends StatefulWidget {
+  Leaderboard({Key? key, required this.score}) : super(key: key);
+
+  final int score;
+  final LocalStorage storage = LocalStorage('AppStorage');
+
+  Map<String, int>? getScoresFromLocalStorage() {
+    String? scoresJSON = storage.getItem('scores');
+    if (scoresJSON == null) {
+      print("empty");
+      return null;
+    }
+    return Map<String, int>.from(json.decode(scoresJSON));
+  }
+
+  void addScoreToLocalStorage(int score) {
+    Map<String, int>? info = getScoresFromLocalStorage();
+
+    DateTime now = DateTime.now();
+    String time = DateFormat.d().format(now) +
+        '.' +
+        DateFormat.M().format(now) +
+        '.' +
+        DateFormat.y().format(now) +
+        ' ' +
+        DateFormat.H().format(now) +
+        ':' +
+        DateFormat.m().format(now);
+
+    print(time);
+
+    if (info != null && info.isNotEmpty) {
+      info.putIfAbsent(time, () => score);
+      storage.setItem('scores', json.encode(info));
+    } else {
+      storage.setItem(
+          'scores',
+          json.encode(<String, int>{
+            time: score,
+          }));
+    }
+  }
+
+  @override
+  State<Leaderboard> createState() => _LeaderboardState();
+}
+
+class _LeaderboardState extends State<Leaderboard> {
+  Map<String, int> prevScores = {};
+  @override
+  void initState() {
+    setState(() {
+      prevScores = widget.getScoresFromLocalStorage() ?? {};
+    });
+    widget.addScoreToLocalStorage(widget.score);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +89,29 @@ class Leaderboard extends StatelessWidget {
                     child: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
-                        children: [
-                          LeaderBoardElement(),
-                          LeaderBoardElement(),
+                        children: <Widget>[
+                          // prevScores != null ? prevScores.forEach((key, value) => LeaderBoardElement()) : LeaderBoardElement();
+
+                          ...prevScores.entries.map((entry) {
+                            return LeaderBoardElement(
+                                time: entry.key, score: entry.value);
+                          }),
+
+                          if (prevScores.isEmpty)
+                            Text(
+                              "No previous scores stored",
+                              style: ColorTheme.bodyTextBoldSmall,
+                            ),
+                          // ElevatedButton(
+                          //     onPressed: () =>
+                          //         {print(widget.getScoresFromLocalStorage())},
+                          //     child: const Text("get")),
+                          // ElevatedButton(
+                          //     onPressed: () => setState(() {
+                          //           widget.storage.clear();
+                          //           prevScores = {};
+                          //         }),
+                          //     child: const Text("clear"))
                         ],
                       ),
                     ),
@@ -56,7 +134,8 @@ class Leaderboard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('You', style: ColorTheme.bodyTextBold),
-                        Text('600', style: ColorTheme.bodyTextVeryBold),
+                        Text(widget.score.toString(),
+                            style: ColorTheme.bodyTextVeryBold),
                       ],
                     ),
                   ),

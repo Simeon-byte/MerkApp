@@ -142,9 +142,9 @@ class ScoreScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Align(
-                  alignment: AlignmentDirectional(0, 0),
-                  child: Leaderboard(), //buttons,
+                Align(
+                  alignment: const AlignmentDirectional(0, 0),
+                  child: Leaderboard(score: score), //buttons,
                 ),
               ],
             ),

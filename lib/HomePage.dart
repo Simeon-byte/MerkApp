@@ -39,13 +39,15 @@ class MyHomePageState extends State<MyHomePage> {
     if (!started || isFlashing == true) return;
     if (index == sequence[sequenceIndex]) {
       // Answer is right
+      setState(() {
+        score++;
+      });
 
       if (sequenceIndex + 1 == sequence.length) {
         setState(() {
           isFlashing = true;
           sequence = generateSequence(sequence.length + 1);
           sequenceIndex = 0;
-          score++;
         });
         print(sequence);
         widget._buttonKey.currentState?.flashButtons(sequence);

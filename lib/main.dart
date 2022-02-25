@@ -5,6 +5,8 @@ void main() {
   runApp(const MyApp());
 }
 
+// java -jar .\bundletool-all-1.8.2.jar install-apks --apks=app-release.apk
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
