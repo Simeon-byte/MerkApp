@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "489048714731",
+    "project_id": "merkapp-e9d7b",
+    "storage_bucket": "merkapp-e9d7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489048714731:android:641c7602a01319fd117dae",
+        "android_client_info": {
+          "package_name": "com.traitor.merkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489048714731-9kton055vcuu78pk50k1g50qorq2dc5r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYHt38LGIBeB4wCwOvr5cQNLdYtZxrL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489048714731-9kton055vcuu78pk50k1g50qorq2dc5r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
