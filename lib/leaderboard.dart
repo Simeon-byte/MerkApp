@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboardElement.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Leaderboard extends StatefulWidget {
   Leaderboard({Key? key, required this.score}) : super(key: key);
@@ -63,6 +65,24 @@ class _LeaderboardState extends State<Leaderboard> {
     super.initState();
   }
 
+  CollectionReference scores = FirebaseFirestore.instance.collection('scores');
+
+  Future<void> addScore() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    // Call the user's CollectionReference to add a new user
+    return scores
+        .doc(currentUser!.uid)
+        .set({
+          'scores': {
+            'name': 'Bob',
+            'score': 10,
+            'timestamp': Timestamp.now()
+          }, // Stokes and Sons
+        })
+        .then((value) => print("user Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -102,10 +122,9 @@ class _LeaderboardState extends State<Leaderboard> {
                               "No previous scores stored",
                               style: ColorTheme.bodyTextBoldSmall,
                             ),
-                          // ElevatedButton(
-                          //     onPressed: () =>
-                          //         {print(widget.getScoresFromLocalStorage())},
-                          //     child: const Text("get")),
+                          ElevatedButton(
+                              onPressed: () => {addScore()},
+                              child: const Text("add score databas")),
                           // ElevatedButton(
                           //     onPressed: () => setState(() {
                           //           widget.storage.clear();
