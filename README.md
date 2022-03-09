@@ -1,16 +1,30 @@
-# merkapp
+# MerkApp
+## A simple Game to improve your memory
+ [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+### Usage
+- Start Button is pressed
+- A sequence of 3 random buttons is generated
+- buttons falsh in the computed order
+- User clicks the buttons in the right order
+- 🔄 Repeat steps above, but sequence gets longer every time, until user gets the sequence wrong
+- User gets navigated to score page
+- Own Score is shown big on the screen
+- List of previous/competetive scores is shown for comparison
+- Restart button navigates back to the beginning
 
-A new Flutter project.
 
-## Getting Started
+### Content
+- Main Page
+-- 3x3 Buttons
+-- Start/Score Button
+- Score Page
+-- Leaderboard
+-- Own Score 
+-- Restart Button
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+Created with [**flutter**](https://flutter.dev/)/dart
+Download ZIP and Extract
+```
+// Work in Progress //
+```
