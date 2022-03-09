@@ -1,86 +1,116 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboardElement.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sqflite/sqflite.dart';
+
+const String tableScores = 'scores';
+const String columnId = '_id';
+const String columnName = 'name';
+const String columnScore = 'score';
+
+class ScoreElement {
+  int id;
+  String name;
+  int score;
+
+  Map<String, Object?> toMap() {
+    var map = <String, dynamic>{columnName: name, columnScore: score};
+
+    return map;
+  }
+
+  ScoreElement(this.id, this.name, this.score);
+}
+
+class ScoreProvider {
+  late Database db;
+  Future open(String path) async {
+    db = await openDatabase(path, version: 1,
+        onCreate: (Database db, int version) async {
+      await db.execute('''
+        create table $tableScores (
+          $columnId integer primary key autoincrement,
+          $columnName text not null,
+          $columnScore integer not null)
+      ''');
+    });
+    return db;
+  }
+
+  Future<ScoreElement> insert(ScoreElement scoreElement) async {
+    scoreElement.id = await db.insert(tableScores, scoreElement.toMap());
+    print("inserted ${scoreElement.name}");
+    return scoreElement;
+  }
+
+  Future<ScoreElement?> getTodo(int id) async {
+    List<Map> maps = await db.query(tableScores,
+        columns: [columnId, columnName, columnScore],
+        where: '$columnId = ?',
+        whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      Map<dynamic, dynamic> map = maps.first;
+      return ScoreElement(map[columnId], map[columnName], map[columnScore]);
+    }
+    return null;
+  }
+
+  Future close() async => db.close();
+}
 
 class Leaderboard extends StatefulWidget {
   Leaderboard({Key? key, required this.score}) : super(key: key);
 
   final int score;
-  final LocalStorage storage = LocalStorage('AppStorage');
-
-  Map<String, int>? getScoresFromLocalStorage() {
-    String? scoresJSON = storage.getItem('scores');
-    if (scoresJSON == null) {
-      print("empty");
-      return null;
-    }
-    return Map<String, int>.from(json.decode(scoresJSON));
-  }
-
-  void addScoreToLocalStorage(int score) {
-    Map<String, int>? info = getScoresFromLocalStorage();
-
-    DateTime now = DateTime.now();
-    String time = DateFormat.d().format(now) +
-        '.' +
-        DateFormat.M().format(now) +
-        '.' +
-        DateFormat.y().format(now) +
-        ' ' +
-        DateFormat.H().format(now) +
-        ':' +
-        DateFormat.m().format(now);
-
-    print(time);
-
-    if (info != null && info.isNotEmpty) {
-      info.putIfAbsent(time, () => score);
-      storage.setItem('scores', json.encode(info));
-    } else {
-      storage.setItem(
-          'scores',
-          json.encode(<String, int>{
-            time: score,
-          }));
-    }
-  }
 
   @override
   State<Leaderboard> createState() => _LeaderboardState();
 }
 
 class _LeaderboardState extends State<Leaderboard> {
-  Map<String, int> prevScores = {};
+  List<ScoreElement> prevScores = List.empty();
+  var provider = ScoreProvider();
+  late Database db;
   @override
   void initState() {
-    setState(() {
-      prevScores = widget.getScoresFromLocalStorage() ?? {};
-    });
-    widget.addScoreToLocalStorage(widget.score);
+    initdb();
     super.initState();
   }
 
-  CollectionReference scores = FirebaseFirestore.instance.collection('scores');
+  void initdb() async {
+    db = await provider.open('Database.db');
+    getScores();
+    addUserScoreToDB();
+  }
 
-  Future<void> addScore() {
-    var currentUser = FirebaseAuth.instance.currentUser;
-    // Call the user's CollectionReference to add a new user
-    return scores
-        .doc(currentUser!.uid)
-        .set({
-          'scores': {
-            'name': 'Bob',
-            'score': 10,
-            'timestamp': Timestamp.now()
-          }, // Stokes and Sons
-        })
-        .then((value) => print("user Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+  void addUserScoreToDB() {
+    DateTime now = DateTime.now();
+    DateFormat formatter = DateFormat('d.MM.yyyy HH:mm:ss');
+    String time = formatter.format(now);
+
+    if (widget.score > 0) {
+      provider.insert(ScoreElement(0, time, widget.score));
+    }
+  }
+
+  void getScores() async {
+    print("a");
+    List<Map<String, dynamic>> records =
+        await db.query(tableScores, orderBy: '-' + columnScore);
+
+    setState(() {
+      if (records.isEmpty) return;
+      prevScores = List.generate(records.length, (i) {
+        return ScoreElement(records[i][columnId], records[i][columnName],
+            records[i][columnScore]);
+      });
+      ;
+    });
+    // inspect(records);
   }
 
   @override
@@ -103,35 +133,53 @@ class _LeaderboardState extends State<Leaderboard> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: <Widget>[
-                          // prevScores != null ? prevScores.forEach((key, value) => LeaderBoardElement()) : LeaderBoardElement();
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.5 - 50,
+                    child: Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            // prevScores.forEach((scoreElement) {LeaderBoardElement(score: scoreElement[columnScore],)})
+                            // prevScores.forEach((scoreElement) => LeaderBoardElement(time: scoreElement.name, score: scoreElement.score)),
+                            ...prevScores.map((scoreElement) {
+                              return LeaderBoardElement(
+                                  time: scoreElement.name,
+                                  score: scoreElement.score);
+                            }),
+                            // prevScores != null ? prevScores.forEach((key, value) => LeaderBoardElement()) : LeaderBoardElement();
 
-                          ...prevScores.entries.map((entry) {
-                            return LeaderBoardElement(
-                                time: entry.key, score: entry.value);
-                          }),
+                            // ...prevScores.entries.map((entry) {
+                            //   return LeaderBoardElement(
+                            //       time: entry.key, score: entry.value);
+                            // }),
 
-                          if (prevScores.isEmpty)
-                            Text(
-                              "No previous scores stored",
-                              style: ColorTheme.bodyTextBoldSmall,
-                            ),
-                          ElevatedButton(
-                              onPressed: () => {addScore()},
-                              child: const Text("add score databas")),
-                          // ElevatedButton(
-                          //     onPressed: () => setState(() {
-                          //           widget.storage.clear();
-                          //           prevScores = {};
-                          //         }),
-                          //     child: const Text("clear"))
-                        ],
+                            if (prevScores.isEmpty)
+                              Text(
+                                "No previous scores stored",
+                                style: ColorTheme.bodyTextBoldSmall,
+                              ),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  ScoreElement element = await provider
+                                      .insert(ScoreElement(0, "Herbert", 50));
+                                  setState(() {
+                                    prevScores.add(element);
+                                  });
+                                },
+                                child: const Text("add score databas")),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  db.delete(tableScores, where: '1');
+                                  setState(() {
+                                    prevScores.clear();
+                                  });
+                                },
+                                child: const Text("Clear DB")),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -154,7 +202,9 @@ class _LeaderboardState extends State<Leaderboard> {
                       children: [
                         Text('You', style: ColorTheme.bodyTextBold),
                         Text(widget.score.toString(),
-                            style: ColorTheme.bodyTextVeryBold),
+                            style: widget.score > 0
+                                ? ColorTheme.bodyTextVeryBold
+                                : ColorTheme.bodyTextRed),
                       ],
                     ),
                   ),

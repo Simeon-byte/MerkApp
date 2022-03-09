@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ScoreScreen extends StatelessWidget {
+class ScoreScreen extends StatefulWidget {
   const ScoreScreen({Key? key, required this.score, required this.title})
       : super(key: key);
 
   final int score;
   final String title;
+
+  @override
+  State<ScoreScreen> createState() => _ScoreScreenState();
+}
+
+class _ScoreScreenState extends State<ScoreScreen> {
+  CollectionReference scores = FirebaseFirestore.instance.collection('scores');
+
+  Future<void> addScore() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    // Call the user's CollectionReference to add a new user
+    return scores
+        .doc(currentUser!.uid)
+        .set({
+          'name': 'Bob',
+          'scores': {
+            'score': 10,
+            'timestamp': Timestamp.now()
+          }, // Stokes and Sons
+        })
+        .then((value) => print("user Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +47,7 @@ class ScoreScreen extends StatelessWidget {
             child: Align(
               alignment: const AlignmentDirectional(0, 0),
               child: Text(
-                title,
+                widget.title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontFamily: 'Roboto Mono',
@@ -108,8 +133,8 @@ class ScoreScreen extends StatelessWidget {
                     ),
                     alignment: const AlignmentDirectional(0, -0.5),
                     child: Stack(
-                      children: const [
-                        Align(
+                      children: [
+                        const Align(
                           alignment: AlignmentDirectional(-0.05, -0.6),
                           child: Text(
                             'Leaderboard',
@@ -122,7 +147,7 @@ class ScoreScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Align(
+                        const Align(
                           alignment: AlignmentDirectional(-0.05, 0),
                           child: Padding(
                             padding:
@@ -138,13 +163,28 @@ class ScoreScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        // Padding(
+                        //     padding: const EdgeInsetsDirectional.fromSTEB(
+                        //         0, 80, 0, 0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                        //       children: [
+                        //         TextField(
+                        //           maxLength: 10,
+                        //         ),
+                        //         ElevatedButton(
+                        //             onPressed: () => {},
+                        //             child: const Text("Submit score"))
+                        //       ],
+                        //     )),
                       ],
                     ),
                   ),
                 ),
                 Align(
                   alignment: const AlignmentDirectional(0, 0),
-                  child: Leaderboard(score: score), //buttons,
+                  child: Leaderboard(score: widget.score), //buttons,
                 ),
               ],
             ),

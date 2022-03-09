@@ -41,4 +41,29 @@ class ColorTheme {
     fontFamily: 'Poppins',
     color: Color.fromARGB(255, 22, 22, 22),
   );
+
+  static TextStyle bodyTextRed = TextStyle(
+      fontWeight: FontWeight.w800,
+      fontSize: 30,
+      fontFamily: 'Poppins',
+      color: const Color.fromARGB(255, 230, 63, 63),
+      shadows: [
+        Shadow(
+          // bottomLeft
+          offset: const Offset(-1.5, -1.5),
+          color: border,
+        ),
+        Shadow(
+            // bottomRight
+            offset: const Offset(1.5, -1.5),
+            color: border),
+        Shadow(
+            // topRight
+            offset: const Offset(1.5, 1.5),
+            color: border),
+        Shadow(
+            // topLeft
+            offset: const Offset(-1.5, 1.5),
+            color: border),
+      ]);
 }
