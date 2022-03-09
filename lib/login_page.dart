@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
-import 'package:merkapp/Widgets.dart';
-import 'package:merkapp/scoreScreen.dart';
+import 'package:merkapp/button_widgets.dart';
+import 'package:merkapp/score_screen.dart';
 import 'package:merkapp/functionality.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,7 +9,7 @@ class LoginPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final _buttonKey = GlobalKey<ButtonColumnState>();
+  final _buttonKey = GlobalKey<ButtonCollectionState>();
 
   @override
   LoginPageState createState() => LoginPageState();

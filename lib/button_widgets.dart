@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'dart:async';
@@ -83,8 +82,8 @@ class MyButtonState extends State<MyButton> {
   }
 }
 
-class ButtonColumn extends StatefulWidget {
-  ButtonColumn(
+class ButtonCollection extends StatefulWidget {
+  ButtonCollection(
       {Key? key,
       required this.score,
       required this.incrementCounter,
@@ -104,10 +103,10 @@ class ButtonColumn extends StatefulWidget {
   final ValueChanged<int> setFlashing;
 
   @override
-  State<ButtonColumn> createState() => ButtonColumnState();
+  State<ButtonCollection> createState() => ButtonCollectionState();
 }
 
-class ButtonColumnState extends State<ButtonColumn> {
+class ButtonCollectionState extends State<ButtonCollection> {
   List<GlobalKey<MyButtonState>> keys = [
     for (int i = 0; i < 9; i++) GlobalKey()
   ];
@@ -165,39 +164,6 @@ class ButtonColumnState extends State<ButtonColumn> {
           children: [...buttons.getRange(6, 9)],
         ),
       ],
-    );
-  }
-}
-
-class AnimatedContainerApp extends StatefulWidget {
-  const AnimatedContainerApp({Key? key}) : super(key: key);
-
-  @override
-  _AnimatedContainerAppState createState() => _AnimatedContainerAppState();
-}
-
-class _AnimatedContainerAppState extends State<AnimatedContainerApp> {
-  // Define the various properties with default values. Update these properties
-  // when the user taps a FloatingActionButton.
-  final double _width = 50;
-  final double _height = 50;
-  final Color _color = Colors.green;
-  final BorderRadiusGeometry _borderRadius = BorderRadius.circular(8);
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      // Use the properties stored in the State class.
-      width: _width,
-      height: _height,
-      decoration: BoxDecoration(
-        color: _color,
-        borderRadius: _borderRadius,
-      ),
-      // Define how long the animation should take.
-      duration: const Duration(seconds: 1),
-      // Provide an optional curve to make the animation feel smoother.
-      curve: Curves.fastOutSlowIn,
     );
   }
 }

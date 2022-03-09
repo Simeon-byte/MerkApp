@@ -1,10 +1,7 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
-import 'package:merkapp/leaderboardElement.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:merkapp/leaderboard_element.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String tableScores = 'scores';

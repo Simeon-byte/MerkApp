@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
-import 'package:merkapp/Widgets.dart';
-import 'package:merkapp/scoreScreen.dart';
+import 'package:merkapp/button_widgets.dart';
+import 'package:merkapp/score_screen.dart';
 import 'package:merkapp/functionality.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -12,7 +12,7 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  final _buttonKey = GlobalKey<ButtonColumnState>();
+  final _buttonKey = GlobalKey<ButtonCollectionState>();
 
   @override
   MyHomePageState createState() => MyHomePageState();
@@ -115,7 +115,7 @@ class MyHomePageState extends State<MyHomePage> {
   //   handleSequence(context, index);
   // }
 
-  late ButtonColumn buttons = ButtonColumn(
+  late ButtonCollection buttons = ButtonCollection(
       key: widget._buttonKey,
       score: score,
       incrementCounter: _incrementCounter,
