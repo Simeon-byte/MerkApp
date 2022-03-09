@@ -122,6 +122,7 @@ class ButtonColumnState extends State<ButtonColumn> {
     for (int i = 0; i < keys.length; i++) {
       keys[i].currentState?.setActive(false);
     }
+    await Future.delayed(const Duration(milliseconds: 500), () {});
     for (int index in sequence) {
       keys[index]
           .currentState

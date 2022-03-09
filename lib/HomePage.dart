@@ -49,7 +49,9 @@ class MyHomePageState extends State<MyHomePage> {
           sequence = generateSequence(sequence.length + 1);
           sequenceIndex = 0;
         });
+
         print(sequence);
+        await Future.delayed(const Duration(milliseconds: 250), () {});
         widget._buttonKey.currentState?.flashButtons(sequence);
       } else {
         setState(() {
