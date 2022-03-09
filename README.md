@@ -13,14 +13,14 @@
 - Restart button navigates back to the beginning
 
 
-### Content
-- Main Page
--- 3x3 Buttons
--- Start/Score Button
-- Score Page
--- Leaderboard
--- Own Score 
--- Restart Button
+## Content
+### Main Page
+- 3x3 Buttons
+- Start/Score Button
+## Score Page
+- Leaderboard
+- Own Score 
+- Restart Button
 
 ## Installation
 Created with [**flutter**](https://flutter.dev/)/dart
