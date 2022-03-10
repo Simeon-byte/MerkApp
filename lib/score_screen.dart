@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboard.dart';
@@ -124,7 +126,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                       )),
                 ),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: 100,
@@ -135,7 +137,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     child: Stack(
                       children: [
                         const Align(
-                          alignment: AlignmentDirectional(-0.05, -0.6),
+                          alignment: AlignmentDirectional(-0.05, -1.1),
                           child: Text(
                             'Leaderboard',
                             textAlign: TextAlign.center,
@@ -148,7 +150,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           ),
                         ),
                         const Align(
-                          alignment: AlignmentDirectional(-0.05, 0),
+                          alignment: AlignmentDirectional(-0.05, -1.5),
                           child: Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 55, 0, 0),
@@ -163,14 +165,28 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             ),
                           ),
                         ),
+                        Align(
+                          alignment: AlignmentDirectional(0, 0),
+                          child: Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 55, 0, 0),
+                            child: Container(
+                                height: 100,
+                                child: ElevatedButton(
+                                  onPressed: () => {},
+                                  child: Text("test"),
+                                )),
+                          ),
+                        )
+
                         // Padding(
                         //     padding: const EdgeInsetsDirectional.fromSTEB(
-                        //         0, 80, 0, 0),
+                        //         0, 0, 0, 0),
                         //     child: Row(
                         //       mainAxisAlignment: MainAxisAlignment.center,
                         //       crossAxisAlignment: CrossAxisAlignment.stretch,
                         //       children: [
-                        //         TextField(
+                        //         const TextField(
                         //           maxLength: 10,
                         //         ),
                         //         ElevatedButton(
@@ -183,8 +199,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                   ),
                 ),
                 Align(
-                  alignment: const AlignmentDirectional(0, 0),
-                  child: Leaderboard(score: widget.score), //buttons,
+                  alignment: const AlignmentDirectional(0, 0.95),
+                  child: Leaderboard(score: widget.score),
                 ),
               ],
             ),

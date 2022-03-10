@@ -5,6 +5,7 @@ class ColorTheme {
   static Color grauDunkel2 = const Color.fromARGB(255, 87, 87, 87);
   static Color grauHell = const Color.fromARGB(255, 133, 133, 133);
   static Color border = const Color.fromARGB(255, 27, 27, 27);
+  static Color textColor = const Color.fromARGB(255, 22, 22, 22);
 
   static Color borderHighlighted = const Color.fromARGB(255, 255, 255, 255);
   static Color highlighted = const Color.fromARGB(255, 255, 0, 0);

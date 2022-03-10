@@ -197,7 +197,19 @@ class _LeaderboardState extends State<Leaderboard> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('You', style: ColorTheme.bodyTextBold),
+                        TextButton(
+                          style: const ButtonStyle(
+                              splashFactory: NoSplash.splashFactory),
+                          onPressed: () => {print("bob")},
+                          child: Row(children: [
+                            Text('You', style: ColorTheme.bodyTextBold),
+                            Icon(
+                              Icons.edit,
+                              size: 22,
+                              color: ColorTheme.textColor,
+                            ),
+                          ]),
+                        ),
                         Text(widget.score.toString(),
                             style: widget.score > 0
                                 ? ColorTheme.bodyTextVeryBold

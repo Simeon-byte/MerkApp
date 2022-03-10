@@ -1,24 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/homepage.dart';
 import 'package:merkapp/login_page.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  FirebaseAuth auth = FirebaseAuth.instance;
-  try {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInAnonymously();
-  } catch (err) {
-    print(err);
-  }
   runApp(MyApp());
 }
 
@@ -33,34 +17,32 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
+  bool loggedIn = true; //false;
   late MyHomePage homepage = MyHomePage(
     title: 'MörkApp',
   );
   @override
   initState() {
-    getUserState();
+    // getUserState();
     super.initState();
   }
 
-  void getUserState() {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        setState(() {
-          loggedIn = false;
-        });
-      } else {
-        setState(() {
-          loggedIn = true;
-        });
-        print(user.uid);
+  // void getUserState() {
+  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  //     if (user == null) {
+  //       setState(() {
+  //         loggedIn = false;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         loggedIn = true;
+  //       });
+  //       print(user.uid);
 
-        print('User is signed in!');
-      }
-    });
-  }
-
-  bool loggedIn = false;
+  //       print('User is signed in!');
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
