@@ -1,10 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/leaderboard.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({Key? key, required this.score, required this.title})
@@ -18,24 +14,6 @@ class ScoreScreen extends StatefulWidget {
 }
 
 class _ScoreScreenState extends State<ScoreScreen> {
-  CollectionReference scores = FirebaseFirestore.instance.collection('scores');
-
-  Future<void> addScore() {
-    var currentUser = FirebaseAuth.instance.currentUser;
-    // Call the user's CollectionReference to add a new user
-    return scores
-        .doc(currentUser!.uid)
-        .set({
-          'name': 'Bob',
-          'scores': {
-            'score': 10,
-            'timestamp': Timestamp.now()
-          }, // Stokes and Sons
-        })
-        .then((value) => print("user Added"))
-        .catchError((error) => print("Failed to add user: $error"));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +37,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
               ),
             ),
           ),
-          actions: [],
+          actions: const [],
           elevation: 4,
         ),
       ),
@@ -135,8 +113,8 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     ),
                     alignment: const AlignmentDirectional(0, -0.5),
                     child: Stack(
-                      children: [
-                        const Align(
+                      children: const [
+                        Align(
                           alignment: AlignmentDirectional(-0.05, -1.1),
                           child: Text(
                             'Leaderboard',
@@ -149,7 +127,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             ),
                           ),
                         ),
-                        const Align(
+                        Align(
                           alignment: AlignmentDirectional(-0.05, -1.5),
                           child: Padding(
                             padding:
@@ -165,19 +143,19 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             ),
                           ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0, 0),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 55, 0, 0),
-                            child: Container(
-                                height: 100,
-                                child: ElevatedButton(
-                                  onPressed: () => {},
-                                  child: Text("test"),
-                                )),
-                          ),
-                        )
+                        // Align(
+                        //   alignment: const AlignmentDirectional(0, 0),
+                        //   child: Padding(
+                        //     padding: const EdgeInsetsDirectional.fromSTEB(
+                        //         0, 55, 0, 0),
+                        //     child: Container(
+                        //         height: 100,
+                        //         child: ElevatedButton(
+                        //           onPressed: () => {},
+                        //           child: const Text("test"),
+                        //         )),
+                        //   ),
+                        // )
 
                         // Padding(
                         //     padding: const EdgeInsetsDirectional.fromSTEB(

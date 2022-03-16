@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 
 List<int> generateSequence(int length) {

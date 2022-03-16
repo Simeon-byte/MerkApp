@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:merkapp/theme.dart';
 import 'package:merkapp/button_widgets.dart';
-import 'package:merkapp/score_screen.dart';
-import 'package:merkapp/functionality.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({

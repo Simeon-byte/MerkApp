@@ -60,7 +60,7 @@ class ScoreProvider {
 }
 
 class Leaderboard extends StatefulWidget {
-  Leaderboard({Key? key, required this.score}) : super(key: key);
+  const Leaderboard({Key? key, required this.score}) : super(key: key);
 
   final int score;
 
@@ -95,7 +95,6 @@ class _LeaderboardState extends State<Leaderboard> {
   }
 
   void getScores() async {
-    print("a");
     List<Map<String, dynamic>> records =
         await db.query(tableScores, orderBy: '-' + columnScore);
 
@@ -105,7 +104,6 @@ class _LeaderboardState extends State<Leaderboard> {
         return ScoreElement(records[i][columnId], records[i][columnName],
             records[i][columnScore]);
       });
-      ;
     });
     // inspect(records);
   }
@@ -139,42 +137,34 @@ class _LeaderboardState extends State<Leaderboard> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
-                            // prevScores.forEach((scoreElement) {LeaderBoardElement(score: scoreElement[columnScore],)})
-                            // prevScores.forEach((scoreElement) => LeaderBoardElement(time: scoreElement.name, score: scoreElement.score)),
                             ...prevScores.map((scoreElement) {
                               return LeaderBoardElement(
                                   time: scoreElement.name,
                                   score: scoreElement.score);
                             }),
-                            // prevScores != null ? prevScores.forEach((key, value) => LeaderBoardElement()) : LeaderBoardElement();
-
-                            // ...prevScores.entries.map((entry) {
-                            //   return LeaderBoardElement(
-                            //       time: entry.key, score: entry.value);
-                            // }),
 
                             if (prevScores.isEmpty)
                               Text(
                                 "No previous scores stored",
                                 style: ColorTheme.bodyTextBoldSmall,
                               ),
-                            ElevatedButton(
-                                onPressed: () async {
-                                  ScoreElement element = await provider
-                                      .insert(ScoreElement(0, "Herbert", 50));
-                                  setState(() {
-                                    prevScores.add(element);
-                                  });
-                                },
-                                child: const Text("add score databas")),
-                            ElevatedButton(
-                                onPressed: () async {
-                                  db.delete(tableScores, where: '1');
-                                  setState(() {
-                                    prevScores.clear();
-                                  });
-                                },
-                                child: const Text("Clear DB")),
+                            // ElevatedButton(
+                            //     onPressed: () async {
+                            //       ScoreElement element = await provider
+                            //           .insert(ScoreElement(0, "Herbert", 50));
+                            //       setState(() {
+                            //         prevScores.add(element);
+                            //       });
+                            //     },
+                            //     child: const Text("add score databas")),
+                            // ElevatedButton(
+                            //     onPressed: () async {
+                            //       db.delete(tableScores, where: '1');
+                            //       setState(() {
+                            //         prevScores.clear();
+                            //       });
+                            //     },
+                            //     child: const Text("Clear DB")),
                           ],
                         ),
                       ),
@@ -203,11 +193,11 @@ class _LeaderboardState extends State<Leaderboard> {
                           onPressed: () => {print("bob")},
                           child: Row(children: [
                             Text('You', style: ColorTheme.bodyTextBold),
-                            Icon(
-                              Icons.edit,
-                              size: 22,
-                              color: ColorTheme.textColor,
-                            ),
+                            // Icon(
+                            //   Icons.edit,
+                            //   size: 22,
+                            //   color: ColorTheme.textColor,
+                            // ),
                           ]),
                         ),
                         Text(widget.score.toString(),

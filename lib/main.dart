@@ -3,13 +3,13 @@ import 'package:merkapp/homepage.dart';
 import 'package:merkapp/login_page.dart';
 
 void main() async {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 // java -jar .\bundletool-all-1.8.2.jar install-apks --apks=app-release.apk
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
