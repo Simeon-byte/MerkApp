@@ -6,12 +6,11 @@ import 'package:merkapp/functionality.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({
-    Key? key,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _buttonKey = GlobalKey<ButtonCollectionState>();
 
   @override
@@ -125,11 +124,11 @@ class MyHomePageState extends State<MyHomePage> {
       handleClick: handleClick,
       setFlashing: _setFlashing);
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
+      resizeToAvoidBottomInset: false,
+      key: widget._scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(

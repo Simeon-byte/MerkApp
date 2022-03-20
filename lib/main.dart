@@ -16,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   bool loggedIn = true; //false;
   late MyHomePage homepage = MyHomePage(
     title: 'MörkApp',

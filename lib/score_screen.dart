@@ -14,9 +14,11 @@ class ScoreScreen extends StatefulWidget {
 }
 
 class _ScoreScreenState extends State<ScoreScreen> {
+  final leaderboardKey = GlobalKey<LeaderboardState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
@@ -44,7 +46,7 @@ class _ScoreScreenState extends State<ScoreScreen> {
       backgroundColor: ColorTheme.grauDunkel2,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(10, 30, 10, 30),
+          padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 1,
@@ -54,54 +56,80 @@ class _ScoreScreenState extends State<ScoreScreen> {
             ),
             child: Stack(
               children: [
-                Align(
-                  alignment: const AlignmentDirectional(0, 0.95),
-                  child: Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: 100,
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorTheme.grauDunkel2,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      alignment: const AlignmentDirectional(0, 0),
-                      child: Container(
-                        width: double.infinity,
-                        height: 100,
+                if (widget.score > 0)
+                  Align(
+                    alignment: const AlignmentDirectional(0, 0.625),
+                    child: Container(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: 50,
                         decoration: BoxDecoration(
                           color: ColorTheme.grauDunkel,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/', (_) => false);
+                            leaderboardKey.currentState?.addUserScoreToDB();
                           },
-                          child: const Text(
-                            // FFAppState().score.toString(),
-                            'Restart',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 30, 30, 30),
-                            ),
-                          ),
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   const Color(0x00727272)),
                               shape: MaterialStateProperty.all<
                                       RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6),
+                                      side: BorderSide(
+                                          color: ColorTheme.border,
+                                          width: 3)))),
+                          child: const Text(
+                            // FFAppState().score.toString(),
+                            'Submit Score',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Color.fromARGB(255, 30, 30, 30),
+                            ),
+                          ),
+                        )),
+                  ),
+                Align(
+                  alignment: const AlignmentDirectional(0, 0.95),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: 85,
+                    decoration: BoxDecoration(
+                      color: ColorTheme.grauDunkel,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/', (_) => false);
+                      },
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0x00727272)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                       side: BorderSide(
                                           color: ColorTheme.border,
                                           width: 3)))),
+                      child: const Text(
+                        // FFAppState().score.toString(),
+                        'Restart',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 30, 30, 30),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
@@ -111,11 +139,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     decoration: BoxDecoration(
                       color: ColorTheme.grauHell,
                     ),
-                    alignment: const AlignmentDirectional(0, -0.5),
                     child: Stack(
                       children: const [
                         Align(
-                          alignment: AlignmentDirectional(-0.05, -1.1),
+                          alignment: AlignmentDirectional(0, -0.8),
                           child: Text(
                             'Leaderboard',
                             textAlign: TextAlign.center,
@@ -128,10 +155,9 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           ),
                         ),
                         Align(
-                          alignment: AlignmentDirectional(-0.05, -1.5),
+                          alignment: AlignmentDirectional(-0.05, 0.4),
                           child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 55, 0, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                             child: Text(
                               'Your current score compared with previous tries',
                               textAlign: TextAlign.center,
@@ -143,43 +169,11 @@ class _ScoreScreenState extends State<ScoreScreen> {
                             ),
                           ),
                         ),
-                        // Align(
-                        //   alignment: const AlignmentDirectional(0, 0),
-                        //   child: Padding(
-                        //     padding: const EdgeInsetsDirectional.fromSTEB(
-                        //         0, 55, 0, 0),
-                        //     child: Container(
-                        //         height: 100,
-                        //         child: ElevatedButton(
-                        //           onPressed: () => {},
-                        //           child: const Text("test"),
-                        //         )),
-                        //   ),
-                        // )
-
-                        // Padding(
-                        //     padding: const EdgeInsetsDirectional.fromSTEB(
-                        //         0, 0, 0, 0),
-                        //     child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       crossAxisAlignment: CrossAxisAlignment.stretch,
-                        //       children: [
-                        //         const TextField(
-                        //           maxLength: 10,
-                        //         ),
-                        //         ElevatedButton(
-                        //             onPressed: () => {},
-                        //             child: const Text("Submit score"))
-                        //       ],
-                        //     )),
                       ],
                     ),
                   ),
                 ),
-                Align(
-                  alignment: const AlignmentDirectional(0, 0.95),
-                  child: Leaderboard(score: widget.score),
-                ),
+                Leaderboard(key: leaderboardKey, score: widget.score),
               ],
             ),
           ),
