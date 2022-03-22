@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -135,11 +136,13 @@ class LeaderboardState extends State<Leaderboard> {
   }
 
   Future getScores() async {
-    records = await db.query(tableScores, orderBy: '-' + columnScore);
+    records =
+        await db.query(tableScores, orderBy: '-' + columnScore, limit: 20);
 
     setState(() {
       if (records.isEmpty) return;
-      prevScores = List.generate(records.length, (i) {
+      prevScores =
+          List.generate(records.length > 20 ? 20 : records.length, (i) {
         return ScoreElement(records[i][columnId], records[i][columnName],
             records[i][columnScore]);
       });
@@ -246,6 +249,7 @@ class LeaderboardState extends State<Leaderboard> {
     setState(() {
       prevScores.removeWhere((element) => element.id == id);
     });
+    getScores();
   }
 
   @override
@@ -297,8 +301,9 @@ class LeaderboardState extends State<Leaderboard> {
                                 ),
                               ElevatedButton(
                                   onPressed: () async {
-                                    ScoreElement element = await provider
-                                        .insert(ScoreElement(0, "Herbert", 50));
+                                    ScoreElement element =
+                                        await provider.insert(ScoreElement(0,
+                                            "Herbert", Random().nextInt(40)));
                                     setState(() {
                                       prevScores.add(element);
                                     });
