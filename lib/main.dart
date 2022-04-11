@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:merkapp/homepage.dart';
-import 'package:merkapp/login_page.dart';
+import 'package:merkapp/HomePage/HomePage.dart';
+import 'package:merkapp/LoginPage/LoginPage.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -17,31 +17,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool loggedIn = true; //false;
-  late MyHomePage homepage = MyHomePage(
+  MyHomePage homepage = MyHomePage(
     title: 'MörkApp',
   );
   @override
   initState() {
-    // getUserState();
     super.initState();
   }
-
-  // void getUserState() {
-  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //     if (user == null) {
-  //       setState(() {
-  //         loggedIn = false;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         loggedIn = true;
-  //       });
-  //       print(user.uid);
-
-  //       print('User is signed in!');
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

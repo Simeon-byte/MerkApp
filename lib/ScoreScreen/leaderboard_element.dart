@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:merkapp/theme.dart';
+import 'package:merkapp/utils/theme.dart';
 
 class LeaderBoardElement extends StatelessWidget {
   const LeaderBoardElement(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:merkapp/theme.dart';
-import 'package:merkapp/leaderboard.dart';
+import 'package:merkapp/utils/theme.dart';
+import 'package:merkapp/ScoreScreen/leaderboard.dart';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({Key? key, required this.score, required this.title})

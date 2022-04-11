@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:merkapp/theme.dart';
-import 'package:merkapp/button_widgets.dart';
+import 'package:merkapp/utils/theme.dart';
+import 'package:merkapp/utils/button_widgets.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({
@@ -14,10 +14,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  // void handleSequenceNew(int index) {
-  //   handleSequence(context, index);
-  // }
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {

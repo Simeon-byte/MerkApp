@@ -1,9 +1,7 @@
 import 'dart:math';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:merkapp/theme.dart';
-import 'package:merkapp/leaderboard_element.dart';
+import 'package:merkapp/utils/theme.dart';
+import 'package:merkapp/ScoreScreen/leaderboard_element.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -88,14 +86,9 @@ class LeaderboardState extends State<Leaderboard> {
     });
     db = await provider.open('Database.db');
     await getScores();
-    // addUserScoreToDB();
   }
 
   void addUserScoreToDB() async {
-    // DateTime now = DateTime.now();
-    // DateFormat formatter = DateFormat('d.MM.yyyy HH:mm:ss');
-    // String time = formatter.format(now);
-
     if (inserted == true) {
       print("already submitted");
       return;
@@ -120,7 +113,7 @@ class LeaderboardState extends State<Leaderboard> {
     } else {
       if (widget.score > exists[columnScore]) {
         // need to update
-        int count = await db.update(tableScores, {columnScore: widget.score},
+        await db.update(tableScores, {columnScore: widget.score},
             where: '$columnId = ?', whereArgs: [exists[columnId]]);
 
         print("updated score");
@@ -155,7 +148,7 @@ class LeaderboardState extends State<Leaderboard> {
     if (text.isEmpty) {
       return 'Can\'t be empty';
     }
-    if (text.length < 4) {
+    if (text.length < 3) {
       return 'Too short';
     }
     if (text.length > 14) {
