@@ -15,6 +15,8 @@ class ScoreScreen extends StatefulWidget {
 
 class _ScoreScreenState extends State<ScoreScreen> {
   final leaderboardKey = GlobalKey<LeaderboardState>();
+  bool submitted = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,9 +69,15 @@ class _ScoreScreenState extends State<ScoreScreen> {
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {
-                            leaderboardKey.currentState?.addUserScoreToDB();
-                          },
+                          onPressed: submitted
+                              ? null
+                              : () {
+                                  leaderboardKey.currentState
+                                      ?.addUserScoreToDB();
+                                  setState(() {
+                                    submitted = true;
+                                  });
+                                },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   const Color(0x00727272)),
@@ -173,7 +181,10 @@ class _ScoreScreenState extends State<ScoreScreen> {
                     ),
                   ),
                 ),
-                Leaderboard(key: leaderboardKey, score: widget.score),
+                Leaderboard(
+                  key: leaderboardKey,
+                  score: widget.score,
+                ),
               ],
             ),
           ),

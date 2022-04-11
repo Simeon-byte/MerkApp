@@ -69,7 +69,7 @@ class LeaderboardState extends State<Leaderboard> {
   late Database db;
   late SharedPreferences prefs;
 
-  late int insertedId;
+  int? insertedId;
 
   String userName = 'user';
 
@@ -292,7 +292,8 @@ class LeaderboardState extends State<Leaderboard> {
                                     id: scoreElement.id,
                                     score: scoreElement.score,
                                     delete: deleteScoreEntry,
-                                    highlighted: insertedId == scoreElement.id
+                                    highlighted: (insertedId != null &&
+                                            insertedId == scoreElement.id)
                                         ? true
                                         : false);
                               }),
