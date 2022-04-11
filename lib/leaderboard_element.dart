@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:intl/intl.dart';
-import 'package:merkapp/leaderboard.dart';
 import 'package:merkapp/theme.dart';
-import 'package:sqflite/sqflite.dart';
 
 class LeaderBoardElement extends StatelessWidget {
   const LeaderBoardElement(
@@ -12,21 +7,31 @@ class LeaderBoardElement extends StatelessWidget {
       required this.name,
       required this.id,
       required this.score,
-      required this.delete})
+      required this.delete,
+      required this.highlighted})
       : super(key: key);
 
   final String name;
   final int score;
   final int id;
   final Function delete;
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: 40,
-      decoration: const BoxDecoration(
-        color: Color(0x32000000),
+      decoration: BoxDecoration(
+        color: highlighted == true
+            ? const Color.fromARGB(255, 116, 114, 114)
+            : const Color(0x32000000),
+        border: highlighted == true
+            ? Border.all(
+                color: const Color(0x32000000),
+                width: 2,
+              )
+            : null,
       ),
       child: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),

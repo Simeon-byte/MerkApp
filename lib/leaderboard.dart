@@ -288,11 +288,13 @@ class LeaderboardState extends State<Leaderboard> {
                             children: <Widget>[
                               ...prevScores.map((scoreElement) {
                                 return LeaderBoardElement(
-                                  name: scoreElement.name,
-                                  id: scoreElement.id,
-                                  score: scoreElement.score,
-                                  delete: deleteScoreEntry,
-                                );
+                                    name: scoreElement.name,
+                                    id: scoreElement.id,
+                                    score: scoreElement.score,
+                                    delete: deleteScoreEntry,
+                                    highlighted: insertedId == scoreElement.id
+                                        ? true
+                                        : false);
                               }),
                               if (prevScores.isEmpty)
                                 Text(
