@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:merkapp/HomePage/HomePage_content.dart';
+import 'package:merkapp/HomePage/homePage_content.dart';
 import 'package:merkapp/utils/button_widgets.dart';
 import 'package:merkapp/utils/functionality.dart';
 import 'package:merkapp/ScoreScreen/score_screen.dart';
