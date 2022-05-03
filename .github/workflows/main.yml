@@ -28,7 +28,7 @@ jobs:
         shell: bash
       - run: flutter pub get
         shell: bash
-      - run: flutter build web --release --web-renderer=auto --base-href /merkapp/
+      - run: flutter build web 
         shell: bash
       - run: git config user.name github-actions
         shell: bash
