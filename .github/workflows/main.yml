@@ -1,37 +1,26 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: Flutter Web
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+    branches:
+      - master
 jobs:
-  build_web:
-    name: Build Flutter (Web)
+  build:
+    name: Build Web
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - uses: subosito/flutter-action@v1
-      with:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
           channel: 'dev'
-    - run: flutter pub get
-    - run: flutter config --enable-web
-    - run: flutter build web
-        # - run: |
-        #     cd build/web
-        #     git init
-        #     git config --global user.email github-actions@github.com
-        #     git config --global user.name github-actions
-        #     git status
-        #     git add --all
-        #     git commit -m "utomatic deployment by github-actions"
-        #     git push origin gh-pages -f
+      - run: flutter config --enable-web
+      - run: flutter pub get
+      - run: flutter build web --release      
+      - run: |
+          cd build/web
+          git init
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
+          git status
+          git add --all
+          git commit -m "utomatic deployment by github-actions"
+          git push origin gh-pages -f
