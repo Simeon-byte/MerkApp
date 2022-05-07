@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '/HomePage/homePage.dart';
-import '/LoginPage/loginPage.dart';
+import 'package:merkapp/HomePage/homePage.dart';
+import 'package:merkapp/LoginPage/loginPage.dart';
 
 void main() async {
   runApp(const MyApp());
