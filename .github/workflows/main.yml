@@ -15,12 +15,11 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release      
-      - run: |
-          cd build/web
-          git init
-          git config --global user.email github-actions@github.com
-          git config --global user.name github-actions
-          git status
-          git add --all
-          git commit -m "utomatic deployment by github-actions"
-          git push origin gh-pages -f
+      - run: cd build/web
+      - run: git init
+      - run: git config --global user.email github-actions@github.com
+      - run: git config --global user.name github-actions
+      - run: git status
+      - run: git add --all
+      - run: git commit -m "utomatic deployment by github-actions"
+      - run: git push origin gh-pages -f
