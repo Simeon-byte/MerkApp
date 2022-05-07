@@ -16,22 +16,22 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build_web:
-  name: Build Flutter (Web)
-  runs-on: ubuntu-latest
-  steps:
-  - uses: actions/checkout@v1
-  - uses: subosito/flutter-action@v1
-    with:
-        channel: 'dev'
-  - run: flutter pub get
-  - run: flutter config --enable-web
-  - run: flutter build web
-      # - run: |
-      #     cd build/web
-      #     git init
-      #     git config --global user.email github-actions@github.com
-      #     git config --global user.name github-actions
-      #     git status
-      #     git add --all
-      #     git commit -m "utomatic deployment by github-actions"
-      #     git push origin gh-pages -f
+    name: Build Flutter (Web)
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: subosito/flutter-action@v1
+      with:
+          channel: 'dev'
+    - run: flutter pub get
+    - run: flutter config --enable-web
+    - run: flutter build web
+        # - run: |
+        #     cd build/web
+        #     git init
+        #     git config --global user.email github-actions@github.com
+        #     git config --global user.name github-actions
+        #     git status
+        #     git add --all
+        #     git commit -m "utomatic deployment by github-actions"
+        #     git push origin gh-pages -f
