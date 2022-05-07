@@ -29,6 +29,7 @@ jobs:
       # - run: flutter --version
       # - run: flutter doctor
       - run: tree
+      - run: flutter clean
       - run: flutter build web --release
       - run: |
           cd build/web
